@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: notipoli-db
+    environment:
+      POSTGRES_DB: notipoli
+      POSTGRES_USER: notipoli
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./notipoli-node/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notipoli -d notipoli"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - notipoli-net
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./notipoli-node
+      dockerfile: Dockerfile
+    container_name: notipoli-api
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgresql://notipoli:${DB_PASSWORD}@postgres:5432/notipoli?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:80}
+      PORT: ${PORT:-3000}
+      UPLOAD_DIR: /app/uploads
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-10485760}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - notipoli-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./notipoli-react
+      dockerfile: Dockerfile
+    container_name: notipoli-web
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - notipoli-net
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+networks:
+  notipoli-net:
+    driver: bridge

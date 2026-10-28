@@ -1,0 +1,14 @@
+/Users/darkzerocol/Documents/Frontend/notipoli-react/README.md
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/README.md
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/admin.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/contacto.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/detalle.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/index.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/login.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/assets/data/noticias.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/index.html
+/Users/darkzerocol/Documents/Frontend/notipoli-react/public/favicon.svg
+/Users/darkzerocol/Documents/Frontend/notipoli-react/public/icons.svg
+/Users/darkzerocol/Documents/Frontend/notipoli-react/src/assets/hero.png
+/Users/darkzerocol/Documents/Frontend/notipoli-react/src/assets/react.svg
+/Users/darkzerocol/Documents/Frontend/notipoli-react/src/assets/vite.svg

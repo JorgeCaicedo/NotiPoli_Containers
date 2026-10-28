@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose *)",
+      "Bash(docker exec *)",
+      "Bash(curl -s -X POST http://localhost/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@notipoli.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s http://notipoli-api:3000/health)",
+      "Bash(curl -s http://localhost/api/auth/login -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"admin@notipoli.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s http://localhost/api/auth/me -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtYWRtaW4xMjM0NTY3ODkwMTIzNDU2NzgiLCJlbWFpbCI6ImFkbWluQG5vdGlwb2xpLmNvbSIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzkzMTY0MTc3LCJleHAiOjE3OTMxNjUwNzd9.AV2OeEaYHW6YiSoGls_E64p_gHDgJcT4DRULL1Lr1UQ\")",
+      "Bash(curl -v -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtYWRtaW4xMjM0NTY3ODkwMTIzNDU2NzgiLCJlbWFpbCI6ImFkbWluQG5vdGlwb2xpLmNvbSIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzkzMTY0MTk2LCJleHAiOjE3OTMxNjUwOTZ9.-tZXDBS7uWmxfDrf_FCN6Oh7j7SueNMJ_u0rKYbP-ws\" http://localhost/api/auth/me)",
+      "Bash(curl -s http://localhost/health)",
+      "Bash(curl -s http://localhost/api/docs)",
+      "Bash(curl -s http://localhost/docs)",
+      "Bash(curl -s -o /dev/null -w \"Status: %{http_code}\" http://localhost/docs)",
+      "Bash(curl -s -o /dev/null -w \"Swagger status: %{http_code}\" http://localhost/docs)",
+      "Bash(curl -s -o /dev/null -w \"Root: %{http_code}\" http://localhost/)",
+      "Bash(curl -s -o /dev/null -w \"/health: %{http_code}\" http://localhost/health)",
+      "Bash(curl -s -o /dev/null -w \"/docs: %{http_code}\" http://localhost/docs)",
+      "Bash(curl -s -o /dev/null -w \"/api/auth/login: %{http_code}\" http://localhost/api/auth/login)"
+    ]
+  }
+}

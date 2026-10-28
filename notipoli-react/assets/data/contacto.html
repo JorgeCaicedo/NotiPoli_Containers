@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto – NotiPoli</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-newspaper me-2"></i>NotiPoli
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto gap-1" id="nav-links">
+          <!-- Renderizado por auth.js -->
+        </ul>
+        <div class="d-flex gap-2 mt-2 mt-lg-0" id="nav-auth">
+          <!-- Renderizado por auth.js -->
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="mb-2">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+          <li class="breadcrumb-item active">Contacto</li>
+        </ol>
+      </nav>
+      <h1 class="fw-bold mb-1">Contáctanos</h1>
+      <p class="text-white-50 mb-0">¿Tienes una noticia, sugerencia o comentario? Escríbenos.</p>
+    </div>
+  </div>
+
+  <!-- ===== FORMULARIO + INFO ===== -->
+  <section class="container py-5">
+    <div class="row g-4 g-lg-5">
+
+      <!-- Formulario -->
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4 p-md-5">
+          <h4 class="fw-bold mb-1">Envíanos un mensaje</h4>
+          <p class="text-muted small mb-4">Todos los campos marcados con * son obligatorios.</p>
+
+          <!-- Alerta de éxito -->
+          <div id="mensaje-exito" class="alert alert-success d-none" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>¡Mensaje enviado!</strong> Nos pondremos en contacto contigo pronto. Gracias por escribirnos.
+          </div>
+
+          <form id="form-contacto" novalidate>
+            <div class="mb-4">
+              <label for="nombre" class="form-label fw-semibold">Nombre completo *</label>
+              <input type="text" id="nombre" name="nombre" class="form-control form-control-lg"
+                     placeholder="Ej: María García" autocomplete="name">
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold">Correo electrónico *</label>
+              <input type="email" id="email" name="email" class="form-control form-control-lg"
+                     placeholder="ejemplo@correo.com" autocomplete="email">
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-4">
+              <label for="mensaje" class="form-label fw-semibold">Mensaje *</label>
+              <textarea id="mensaje" name="mensaje" class="form-control" rows="6"
+                        placeholder="Escribe tu mensaje aquí…"></textarea>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100">
+              <i class="bi bi-send-fill me-2"></i>Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Información de contacto -->
+      <div class="col-lg-5">
+        <div class="contact-info-card p-4 p-md-5 mb-4">
+          <h4 class="fw-bold mb-4">Información de Contacto</h4>
+
+          <div class="d-flex align-items-start mb-4">
+            <div class="fs-4 me-3 text-accent"><i class="bi bi-geo-alt-fill"></i></div>
+            <div>
+              <h6 class="fw-bold mb-1">Dirección</h6>
+              <p class="text-white-50 mb-0 small">Manizales, Caldas</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-4">
+            <div class="fs-4 me-3 text-accent"><i class="bi bi-telephone-fill"></i></div>
+            <div>
+              <h6 class="fw-bold mb-1">Teléfono</h6>
+              <p class="text-white-50 mb-0 small">
+                <a href="tel:+573163810404">(316) 381 04 04</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-4">
+            <div class="fs-4 me-3 text-accent"><i class="bi bi-envelope-fill"></i></div>
+            <div>
+              <h6 class="fw-bold mb-1">Correo Electrónico</h6>
+              <p class="text-white-50 mb-0 small">
+                <a href="mailto:jhecaicedog@poligran.edu.co">jhecaicedog@poligran.edu.co</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-4">
+            <div class="fs-4 me-3 text-accent"><i class="bi bi-clock-fill"></i></div>
+            <div>
+              <h6 class="fw-bold mb-1">Horario de Atención</h6>
+              <p class="text-white-50 mb-0 small">Lunes a Viernes: 7:00 AM – 6:00 PM<br>Sábados: 8:00 AM – 1:00 PM</p>
+            </div>
+          </div>
+
+          <hr class="border-secondary">
+
+          <h6 class="fw-bold mb-3">Redes Sociales</h6>
+          <div class="d-flex gap-3 fs-4">
+            <a href="#" class="text-white text-decoration-none" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-white text-decoration-none" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-white text-decoration-none" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-white text-decoration-none" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="text-white text-decoration-none" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer-custom pt-5 pb-3">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-2"><i class="bi bi-newspaper me-2"></i>NotiPoli</h5>
+          <p class="text-white-50 small">Mantente enterado de todas las noticias del Politécnico Grancolombiano.</p>
+        </div>
+        <div class="col-md-3">
+          <h6 class="text-white fw-bold mb-3">Navegación</h6>
+          <ul class="list-unstyled footer-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html">Noticias</a></li>
+            <li><a href="admin.html">Administración</a></li>
+            <li><a href="login.html">Ingresar / Registro</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="text-white fw-bold mb-3">Categorías</h6>
+          <ul class="list-unstyled footer-links">
+            <li><a href="noticias.html?categoria=Educacion">Educación</a></li>
+            <li><a href="noticias.html?categoria=Tecnologia">Tecnología</a></li>
+            <li><a href="noticias.html?categoria=Turismo">Turismo</a></li>
+            <li><a href="noticias.html?categoria=Comercio">Comercio</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-secondary mt-4">
+      <p class="text-center text-white-50 small mb-0">
+        © 2026 NotiPoli – Politécnico Grancolombiano. Todos los derechos reservados.
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/favoritos.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/contacto.js"></script>
+</body>
+</html>

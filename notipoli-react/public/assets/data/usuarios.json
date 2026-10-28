@@ -1,0 +1,18 @@
+[
+  {
+    "id": "admin_001",
+    "nombre": "Jorge Caicedo",
+    "email": "jorge.caicedo@admin.com",
+    "password": "Admin@2026",
+    "rol": "Admin",
+    "creado": "2026-09-29"
+  },
+  {
+    "id": "reg_001",
+    "nombre": "Jorge Caicedo",
+    "email": "jorge.caicedo@registrado.com",
+    "password": "Registrado@2026",
+    "rol": "Registrado",
+    "creado": "2026-09-29"
+  }
+]

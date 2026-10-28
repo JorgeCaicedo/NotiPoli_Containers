@@ -1,0 +1,160 @@
+// notipoli-node/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum NewsStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================
+// MODELS
+// ============================================
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  name          String
+  avatarUrl     String?   @map("avatar_url")
+  role          UserRole  @default(VIEWER)
+  isActive      Boolean   @default(true) @map("is_active")
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  news          News[]    @relation("AuthorNews")
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+  @@index([email])
+  @@index([role])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model News {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  excerpt     String?
+  content     String
+  coverImage  String?    @map("cover_image")
+  status      NewsStatus @default(DRAFT)
+  publishedAt DateTime?  @map("published_at")
+  authorId    String     @map("author_id")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  author      User       @relation("AuthorNews", fields: [authorId], references: [id])
+  categories  NewsCategory[]
+  tags        NewsTag[]
+
+  @@map("news")
+  @@index([status])
+  @@index([publishedAt])
+  @@index([authorId])
+  @@index([slug])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?  // Hex color for UI
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  news NewsCategory[]
+
+  @@map("categories")
+}
+
+model NewsCategory {
+  newsId      String   @map("news_id")
+  categoryId  String   @map("category_id")
+
+  news     News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([newsId, categoryId])
+  @@map("news_categories")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  news NewsTag[]
+
+  @@map("tags")
+}
+
+model NewsTag {
+  newsId String @map("news_id")
+  tagId  String @map("tag_id")
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([newsId, tagId])
+  @@map("news_tags")
+}
+
+model Upload {
+  id          String   @id @default(cuid())
+  filename    String   @unique
+  originalName String  @map("original_name")
+  mimeType    String   @map("mime_type")
+  size        Int
+  path        String
+  url         String
+  uploadedBy  String?  @map("uploaded_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("uploads")
+  @@index([uploadedBy])
+  @@index([mimeType])
+}
+
+model Setting {
+  key         String   @id
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

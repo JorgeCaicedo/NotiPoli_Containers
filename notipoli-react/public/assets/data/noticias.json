@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "titulo": "El Politécnico inaugura su nueva Biblioteca Digital con más de 10,000 recursos",
+    "categoria": "Educacion",
+    "imagen": "https://picsum.photos/seed/poli-edu1/800/500",
+    "extracto": "Con más de 10,000 recursos académicos disponibles las 24 horas, la nueva plataforma digital revoluciona el acceso al conocimiento para toda la comunidad académica del Poli.",
+    "contenido": "El Politécnico Grancolombiano Jaime Isaza Cadavid dio un gran paso hacia la modernización educativa con la inauguración de su Biblioteca Digital Integrada, un proyecto que tardó tres años en desarrollo y que ahora se convierte en una de las herramientas más importantes para estudiantes y docentes.\n\nLa plataforma cuenta con acceso a más de 10,000 recursos académicos entre libros electrónicos, revistas científicas, tesis de grado, artículos de investigación y bases de datos especializadas. Todo el contenido está disponible las 24 horas del día, los 7 días de la semana, desde cualquier dispositivo con conexión a internet.\n\n\"Este es un logro histórico para nuestra institución. Ahora nuestros estudiantes tienen acceso a los mismos recursos que las mejores universidades del mundo\", destacó el rector durante la ceremonia de inauguración.\n\nLa biblioteca digital también integra herramientas de inteligencia artificial que ayudan a los usuarios a encontrar recursos relevantes para sus investigaciones y proyectos académicos. Además, incluye un sistema de recomendaciones personalizadas basado en el historial de búsquedas y el programa académico de cada estudiante.\n\nEl proyecto contó con una inversión de más de 500 millones de pesos y fue desarrollado en colaboración con empresas tecnológicas especializadas en educación digital.",
+    "fecha": "2026-09-15",
+    "autor": "Redacción NotiPoli",
+    "destacada": true
+  },
+  {
+    "id": 2,
+    "titulo": "Laboratorio de Inteligencia Artificial abre sus puertas a estudiantes de Ingeniería",
+    "categoria": "Tecnologia",
+    "imagen": "https://picsum.photos/seed/poli-tech1/800/500",
+    "extracto": "El nuevo laboratorio de IA ofrece a los estudiantes de ingeniería acceso a equipos de última generación para investigación y desarrollo en machine learning y robótica.",
+    "contenido": "El Politécnico inauguró su nuevo Laboratorio de Inteligencia Artificial, un espacio de vanguardia tecnológica equipado con 30 estaciones de trabajo de alto rendimiento, servidores GPU dedicados y los últimos modelos de robots colaborativos.\n\nEste laboratorio representa una inversión de más de 2,000 millones de pesos y está disponible para todos los estudiantes de los programas de Ingeniería de Sistemas, Electrónica y Mecatrónica.\n\nEl laboratorio cuenta con acceso a plataformas especializadas de machine learning, procesamiento de lenguaje natural, visión por computadora y robótica autónoma. Los estudiantes podrán desarrollar proyectos de investigación con tecnologías de punta que normalmente solo están disponibles en grandes corporaciones tecnológicas.\n\n\"Queremos que nuestros graduados sean competitivos a nivel global en el campo de la inteligencia artificial\", afirmó el decano de la Facultad de Ingenierías.\n\nEl laboratorio también ofrecerá cursos abiertos para profesionales del sector industrial que deseen actualizar sus conocimientos en IA y aplicarlos a sus contextos de trabajo.",
+    "fecha": "2026-09-10",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 3,
+    "titulo": "Festival de Turismo Cultural celebra la diversidad de Antioquia en el campus",
+    "categoria": "Turismo",
+    "imagen": "https://picsum.photos/seed/poli-tur1/800/500",
+    "extracto": "El campus acoge el primer festival de turismo cultural con la participación de más de 20 municipios antioqueños, mostrando artesanías, gastronomía y tradiciones locales.",
+    "contenido": "Durante tres días, el campus del Politécnico se convirtió en el escenario del Primer Festival de Turismo Cultural de Antioquia, un evento que reunió representantes de más de 20 municipios del departamento para mostrar su riqueza cultural, gastronómica y artesanal.\n\nEl festival contó con stands temáticos de cada municipio participante, donde los visitantes pudieron conocer las tradiciones, probar delicias gastronómicas típicas y adquirir artesanías locales. También se realizaron presentaciones folclóricas, conciertos de música tradicional antioqueña y talleres de cocina regional.\n\nLa iniciativa surge como parte del proyecto académico \"Turismo Sostenible y Desarrollo Local\", liderado por el programa de Turismo del Poli, que busca fortalecer los lazos entre la academia y las comunidades rurales.\n\n\"Este festival es una vitrina para que el mundo vea la riqueza cultural de nuestros municipios\", comentó la coordinadora del programa.\n\nMás de 5,000 personas visitaron el evento durante los tres días de celebración, superando ampliamente las expectativas de los organizadores.",
+    "fecha": "2026-09-05",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 4,
+    "titulo": "Feria de Emprendimiento del Poli: 50 proyectos compiten por inversión seed",
+    "categoria": "Comercio",
+    "imagen": "https://picsum.photos/seed/poli-com1/800/500",
+    "extracto": "La Feria Anual de Emprendimiento del Poli reúne a 50 proyectos estudiantiles con innovadoras propuestas de negocio que buscan transformar sus sectores.",
+    "contenido": "La décima edición de la Feria de Emprendimiento del Politécnico batió todos los récords: 50 proyectos estudiantiles compitieron este año por fondos seed de hasta 50 millones de pesos, con la participación de más de 30 inversionistas ángeles y fondos de capital de riesgo de Medellín, Bogotá y Cali.\n\nLos proyectos presentados abarcan sectores como tecnología, salud, sostenibilidad, alimentación y educación. El ganador del primer lugar fue \"AgroTech Poli\", una startup que desarrolló una plataforma de agricultura de precisión para pequeños agricultores, utilizando sensores IoT y análisis de datos para optimizar el uso de agua y fertilizantes.\n\nEl segundo lugar fue para \"MediApp\", una aplicación que conecta pacientes rurales con médicos especialistas a través de telemedicina con traducción automática para comunidades indígenas.\n\n\"El nivel de los proyectos este año superó todas nuestras expectativas. Vemos claramente que la próxima generación de emprendedores colombianos está en nuestras aulas\", destacó el jurado.\n\nEn total, los inversionistas presentes comprometieron más de 500 millones de pesos para financiar los 10 mejores proyectos.",
+    "fecha": "2026-09-01",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 5,
+    "titulo": "Cinco universidades europeas firman convenios de doble titulación con el Poli",
+    "categoria": "Educacion",
+    "imagen": "https://picsum.photos/seed/poli-edu2/800/500",
+    "extracto": "El Poli firma convenios con 5 universidades europeas para ofrecer programas de doble titulación que permitirán a estudiantes obtener diplomas de Colombia y Europa.",
+    "contenido": "En una ceremonia realizada en el Salón Rectoral, el Politécnico Grancolombiano firmó acuerdos de doble titulación con cinco prestigiosas instituciones europeas: la Universidad Politécnica de Madrid, la Universidad Técnica de Munich, el Institut National des Sciences Appliquées de Lyon, la Universidad de Bolonia y la Universidad de Porto.\n\nEstos convenios permitirán que estudiantes destacados de los programas de Ingeniería, Arquitectura y Administración puedan cursar uno o dos semestres en Europa, obteniendo al final de su carrera un título reconocido tanto en Colombia como en el país europeo correspondiente.\n\nLos programas de doble titulación estarán disponibles a partir del segundo semestre de 2027 y contemplarán becas parciales para cubrir los costos de transporte y manutención en Europa. Se espera que inicialmente 50 estudiantes por año puedan acceder a estos beneficios.\n\n\"Este es un paso fundamental para la internacionalización del Poli. Queremos que nuestros estudiantes tengan una visión global y oportunidades laborales en todo el mundo\", señaló el Vicerrector Académico.",
+    "fecha": "2026-08-28",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 6,
+    "titulo": "App del Poli supera las 10,000 descargas y suma nuevas funcionalidades",
+    "categoria": "Tecnologia",
+    "imagen": "https://picsum.photos/seed/poli-tech2/800/500",
+    "extracto": "La aplicación móvil oficial del Politécnico alcanza un hito histórico con más de 10,000 descargas y lanza nuevas funciones de agenda académica y servicios estudiantiles.",
+    "contenido": "Apenas cuatro semanas después de su lanzamiento oficial en App Store y Google Play, la aplicación móvil del Politécnico superó las 10,000 descargas, convirtiéndose en la app educativa más descargada de Medellín durante el mes de agosto.\n\nLa app, desarrollada íntegramente por estudiantes del programa de Ingeniería de Sistemas bajo la supervisión de docentes, ofrece funcionalidades como consulta de notas en tiempo real, horarios de clases, calendario académico, acceso a la biblioteca digital, chat con tutores y notificaciones de eventos del campus.\n\nEsta semana se lanzó la versión 2.0 que incorpora nuevas características: el Sistema de Reserva de Espacios, que permite reservar salones, laboratorios y zonas de estudio; el módulo de Pagos Digitales para realizar pagos de matrícula sin hacer fila; y el Asistente Virtual con IA que responde preguntas frecuentes sobre trámites académicos las 24 horas.\n\n\"El éxito de esta app demuestra que nuestros estudiantes son capaces de desarrollar productos de clase mundial\", afirmó el director del programa.",
+    "fecha": "2026-08-20",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 7,
+    "titulo": "Ruta de Turismo Científico: el campus como destino de innovación y aprendizaje",
+    "categoria": "Turismo",
+    "imagen": "https://picsum.photos/seed/poli-tur2/800/500",
+    "extracto": "El Poli lanza una ruta turística guiada que recorre sus laboratorios, centros de investigación y espacios creativos, abierta al público general los fines de semana.",
+    "contenido": "El Politécnico lanzó la \"Ruta de Turismo Científico Poli\", una iniciativa pionera en Colombia que convierte el campus universitario en un destino turístico de primer nivel. Todos los sábados, grupos de hasta 20 personas pueden inscribirse para realizar un recorrido guiado de tres horas por los espacios más innovadores del campus.\n\nLa ruta incluye visitas al Laboratorio de Inteligencia Artificial, el Centro de Fabricación Digital con impresoras 3D industriales, el Laboratorio de Biotecnología, el estudio de Radio y TV del programa de Comunicación Audiovisual, y el vivero de plantas medicinales del programa de Agronomía.\n\nLos tours son conducidos por estudiantes capacitados como guías turísticos científicos, quienes explican de manera accesible y entretenida los proyectos de investigación e innovación que se desarrollan en cada espacio.\n\nEl programa ha tenido una acogida extraordinaria: en su primer mes de operación, más de 800 personas han visitado el campus. Se ofrecen visitas especiales para grupos escolares entre semana, con tarifas reducidas para instituciones públicas.",
+    "fecha": "2026-08-15",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  },
+  {
+    "id": 8,
+    "titulo": "Multinacional crea 200 plazas laborales exclusivas para egresados del Poli",
+    "categoria": "Comercio",
+    "imagen": "https://picsum.photos/seed/poli-com2/800/500",
+    "extracto": "Una nueva alianza estratégica genera más de 200 oportunidades laborales inmediatas para egresados en el sector comercial y de tecnología de la información.",
+    "contenido": "El Politécnico y la multinacional TechGlobal Colombia S.A.S. firmaron un acuerdo de vinculación laboral que creará 200 plazas de empleo exclusivas para egresados del Poli durante el próximo año.\n\nEl acuerdo contempla posiciones en las áreas de desarrollo de software, análisis de datos, comercio electrónico, soporte técnico empresarial y gestión de proyectos tecnológicos. Los salarios iniciales oscilan entre 3 y 8 millones de pesos según el perfil y la experiencia, con posibilidades de trabajar de forma remota o híbrida.\n\nAdicionalmente, TechGlobal se comprometió a financiar la capacitación de 500 estudiantes actuales del Poli a través de bootcamps intensivos de 6 semanas en tecnologías demandadas por la industria, incluyendo cloud computing, ciberseguridad, DevOps y desarrollo de aplicaciones móviles.\n\nLos estudiantes que completen exitosamente estos programas tendrán prioridad en los procesos de selección.\n\n\"Esta alianza demuestra la confianza del sector empresarial en la calidad académica del Poli. Nuestros egresados son reconocidos por su preparación práctica y su capacidad de adaptación\", expresó el Director de Egresados.",
+    "fecha": "2026-08-10",
+    "autor": "Redacción NotiPoli",
+    "destacada": false
+  }
+]
