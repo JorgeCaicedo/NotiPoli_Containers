@@ -99,13 +99,13 @@ async function main() {
   console.log('✅ Additional categories created:', [seguridad.name, normativa.name])
 
   // Create tags
-  const tags = await Promise.all([
-    prisma.tag.upsert({ where: { slug: 'policia' }, update: {}, create: { name: 'Policía', slug: 'policia' } }),
-    prisma.tag.upsert({ where: { slug: 'prevencion' }, update: {}, create: { name: 'Prevención', slug: 'prevencion' } }),
-    prisma.tag.upsert({ where: { slug: 'operativo' }, update: {}, create: { name: 'Operativo', slug: 'operativo' } }),
-    prisma.tag.upsert({ where: { slug: 'comunidad' }, update: {}, create: { name: 'Comunidad', slug: 'comunidad' } }),
-    prisma.tag.upsert({ where: { slug: 'tecnologia' }, update: {}, create: { name: 'Tecnología', slug: 'tecnologia' } }),
-  ])
+  const police = await prisma.tag.upsert({ where: { slug: 'policia' }, update: {}, create: { name: 'Policía', slug: 'policia' } })
+  const prevencion = await prisma.tag.upsert({ where: { slug: 'prevencion' }, update: {}, create: { name: 'Prevención', slug: 'prevencion' } })
+  const operativo = await prisma.tag.upsert({ where: { slug: 'operativo' }, update: {}, create: { name: 'Operativo', slug: 'operativo' } })
+  const comunidad = await prisma.tag.upsert({ where: { slug: 'comunidad' }, update: {}, create: { name: 'Comunidad', slug: 'comunidad' } })
+  const tecnologia = await prisma.tag.upsert({ where: { slug: 'tecnologia' }, update: {}, create: { name: 'Tecnología', slug: 'tecnologia' } })
+
+  const tags = [police, prevencion, operativo, comunidad, tecnologia]
   console.log('✅ Tags created:', tags.length)
 
   // Create sample news with Tecnología and Educación categories
@@ -180,6 +180,76 @@ async function main() {
     },
   })
   console.log('✅ Sample news created:', news2.title)
+
+  // Create additional news articles for variety
+  const additionalNews = [
+    {
+      title: 'Operativo especial en el centro comercial',
+      slug: 'operativo-especial-centro-comercial',
+      excerpt: 'Control nocturno preventivo en el área comercial.',
+      content: '<h2>Operativo Especial</h2><p>Las unidades patrullan el centro comercial para prevenir robos y garantizar la seguridad.</p>',
+      authorId: admin.id,
+      categories: [seguridad.id, tecnologia.id],
+      tags: [tags[0].id, tags[4].id], // Policía, Tecnología
+    },
+    {
+      title: 'Campaña de seguridad vial en avenida principal',
+      slug: 'campana-seguridad-vial-avenida-principal',
+      excerpt: 'Verificación de velocidad y respetar normas de tránsito.',
+      content: '<h2>Campaña Vial</h2><p>Revisamos el cumplimiento de normas de tránsito en la avenida principal.</p>',
+      authorId: admin.id,
+      categories: [seguridad.id],
+      tags: [tags[1].id, tags[4].id], // Prevención, Tecnología
+    },
+    {
+      title: 'Talleres de prevención del delito para jóvenes',
+      slug: 'talleres-prevencion-delito-jovenes',
+      excerpt: 'Programa mensual de formación ciudadana.',
+      content: '<h2>Talleres de Prevención</h2><p>Los talleres brindan herramientas para la convivencia segura en la comunidad.</p>',
+      authorId: editor.id,
+      categories: [educacion.id, campus.id],
+      tags: [tags[3].id, tags[1].id], // Comunidad, Prevención
+    },
+    {
+      title: 'Actualización en protocolos de respuesta a emergencias',
+      slug: 'actualizacion-protocolos-respuesta-emergencias',
+      excerpt: 'Nuevas directrices operativas implementadas.',
+      content: '<h2>Protocolos Actualizados</h2><p>Se implementan nuevas directrices para una respuesta más eficiente ante emergencias.</p>',
+      authorId: editor.id,
+      categories: [normativa.id, seguridad.id],
+      tags: [tags[0].id, tags[2].id], // Policía, Operativo
+    },
+    {
+      title: 'Reconocimiento a agentes con más de 10 años de servicio',
+      slug: 'reconocimiento-agentes-mas-10-anos-servicio',
+      excerpt: 'Ceremonia de homenaje a profesionales destacados.',
+      content: '<h2>Reconocimiento</h2><p>Se entregaron reconocimientos a agentes destacados por su dedicación a la institución.</p>',
+      authorId: admin.id,
+      categories: [campus.id, comunidad.id],
+      tags: [tags[3].id], // Comunidad
+    },
+  ]
+
+  for (const newsItem of additionalNews) {
+    const news = await prisma.news.create({
+      data: {
+        title: newsItem.title,
+        slug: newsItem.slug,
+        excerpt: newsItem.excerpt,
+        content: newsItem.content,
+        status: NewsStatus.PUBLISHED,
+        publishedAt: new Date(),
+        authorId: newsItem.authorId,
+        categories: {
+          create: newsItem.categories.map(catId => ({ categoryId: catId })),
+        },
+        tags: {
+          create: newsItem.tags.map(tagId => ({ tagId })),
+        },
+      },
+    })
+    console.log('✅ Additional news created:', news.title)
+  }
 
   // Create settings
   await prisma.setting.upsert({

@@ -17,7 +17,7 @@ declare module 'fastify' {
 
 export async function authenticate(app: FastifyInstance) {
   app.addHook('preHandler', async (request, reply) => {
-    const publicPaths = ['/health', '/docs', '/api/auth/login', '/api/auth/register', '/api/auth/refresh', '/api/news', '/api/categories', '/api/tags']
+    const publicPaths = ['/health', '/docs', '/api/auth/login', '/api/auth/register', '/api/auth/refresh']
     if (publicPaths.some(path => request.url.startsWith(path))) return
 
     try {

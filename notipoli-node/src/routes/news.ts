@@ -63,7 +63,20 @@ function generateSlug(title: string): string {
 
 export async function newsRoutes(app: FastifyInstance) {
   // GET /api/news - List news (public: only published)
-  app.get('/', async (request, reply) => {
+  app.get('/', {
+    preHandler: async (request, reply) => {
+      // Public route - but still attach user if authenticated
+      const token = request.headers.authorization?.replace('Bearer ', '')
+      if (token) {
+        try {
+          const decoded = await request.jwtVerify<AuthUser>()
+          request.authUser = decoded
+        } catch {
+          // Ignore - user not authenticated, still allow access
+        }
+      }
+    },
+  }, async (request, reply) => {
     // Parse and validate query params with defaults
     const query = request.query as any
 
