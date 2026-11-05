@@ -190,16 +190,15 @@ export async function authRoutes(app: FastifyInstance) {
     return reply.send({ user })
   })
 
-  // GET /api/auth/menus - Get menus based on user role
-  app.get('/menus', {
-    preHandler: async (request, reply) => {
-      if (!request.authUser) {
-        return reply.status(401).send({ message: 'Unauthorized' })
-      }
-    },
-  }, async (request: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/auth/menus - Get menus based on user role (public, requires role param)
+  app.get('/menus', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const menus = await getRoleMenus(request.authUser!.role)
+      const role = (request.query as any).role
+      if (!role) {
+        return reply.status(400).send({ message: 'Role parameter required' })
+      }
+
+      const menus = await getRoleMenus(role)
 
       // Add Favorites menu for logged-in users
       const favoritesMenu = {

@@ -96,4 +96,17 @@ export async function adminRoutes(app: FastifyInstance) {
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     })
   })
+
+  // GET /api/auth/menus - Menu structure by role (public)
+  app.get('/menus', async (request, reply) => {
+    const role = (request.query as any).role
+    if (!role) return reply.status(400).send({ message: 'Role parameter required' })
+
+    const menus = await prisma.roleMenu.findMany({
+      where: { role },
+      orderBy: { menuOrder: 'asc' },
+    })
+
+    return reply.send({ data: menus })
+  })
 }
