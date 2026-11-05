@@ -4,6 +4,8 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import prisma from '../config/prisma.js'
 import crypto from 'crypto'
+import { getRoleMenus } from '../services/roleMenuService.js'
+import { AuthUser } from '../middleware/auth.js'
 
 const loginSchema = z.object({
   body: z.object({
@@ -169,13 +171,15 @@ export async function authRoutes(app: FastifyInstance) {
   })
 
   // GET /api/auth/me
-  app.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
-    if (!request.authUser) {
-      return reply.status(401).send({ message: 'Unauthorized' })
-    }
-
+  app.get('/me', {
+    preHandler: async (request, reply) => {
+      if (!request.authUser) {
+        return reply.status(401).send({ message: 'Unauthorized' })
+      }
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
     const user = await prisma.user.findUnique({
-      where: { id: request.authUser.id },
+      where: { id: request.authUser!.id },
       select: { id: true, email: true, name: true, avatarUrl: true, role: true, createdAt: true },
     })
 
@@ -184,5 +188,35 @@ export async function authRoutes(app: FastifyInstance) {
     }
 
     return reply.send({ user })
+  })
+
+  // GET /api/auth/menus - Get menus based on user role
+  app.get('/menus', {
+    preHandler: async (request, reply) => {
+      if (!request.authUser) {
+        return reply.status(401).send({ message: 'Unauthorized' })
+      }
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const menus = await getRoleMenus(request.authUser!.role)
+
+      // Add Favorites menu for logged-in users
+      const favoritesMenu = {
+        menuPath: '/favoritos',
+        menuLabel: 'Favoritos',
+        menuIcon: 'bi bi-star',
+        menuOrder: 99
+      }
+
+      // Check if Favoritos already exists for this role, if not add it
+      const hasFavorites = menus.some(m => m.menuLabel === 'Favoritos')
+      const finalMenus = hasFavorites ? menus : [...menus, favoritesMenu]
+
+      return reply.send({ menus: finalMenus })
+    } catch (err) {
+      request.log.error({ err: err instanceof Error ? err : new Error(String(err)) }, 'Failed to fetch menus')
+      return reply.status(500).send({ message: 'Failed to fetch menus' })
+    }
   })
 }

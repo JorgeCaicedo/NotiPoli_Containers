@@ -26,7 +26,9 @@ export async function adminRoutes(app: FastifyInstance) {
       totalNews,
       publishedNews,
       draftNews,
+      archivedNews,
       totalUploads,
+      totalFavorites,
       recentUsers,
       recentNews,
     ] = await Promise.all([
@@ -34,7 +36,9 @@ export async function adminRoutes(app: FastifyInstance) {
       prisma.news.count(),
       prisma.news.count({ where: { status: 'PUBLISHED' } }),
       prisma.news.count({ where: { status: 'DRAFT' } }),
+      prisma.news.count({ where: { status: 'ARCHIVED' } }),
       prisma.upload.count(),
+      prisma.favorite.count(),
       prisma.user.findMany({
         take: 5,
         orderBy: { createdAt: 'desc' },
@@ -47,42 +51,16 @@ export async function adminRoutes(app: FastifyInstance) {
       }),
     ])
 
-    const newsByStatus = await prisma.news.groupBy({
-      by: ['status'],
-      _count: true,
-    })
-
-    const usersByRole = await prisma.user.groupBy({
-      by: ['role'],
-      _count: true,
-    })
-
-    const sixMonthsAgo = new Date()
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
-
-    const uploadsByMonth = await prisma.$queryRaw`
-      SELECT to_char("createdAt", 'YYYY-MM') as month, count(*) as count
-      FROM "uploads"
-      WHERE "createdAt" >= ${sixMonthsAgo}
-      GROUP BY month
-      ORDER BY month
-    ` as UploadsByMonth[]
-
     return reply.send({
-      data: {
-        overview: {
-          totalUsers,
-          totalNews,
-          publishedNews,
-          draftNews,
-          totalUploads,
-        },
-        newsByStatus: newsByStatus.map((s: NewsStatusCount) => ({ status: s.status, count: s._count })),
-        usersByRole: usersByRole.map((r: UserRoleCount) => ({ role: r.role, count: r._count })),
-        uploadsByMonth: uploadsByMonth.map((m: UploadsByMonth) => ({ month: m.month, count: Number(m.count) })),
-        recentUsers,
-        recentNews,
-      },
+      totalUsers,
+      totalNews,
+      publishedNews,
+      draftNews,
+      archivedNews,
+      totalFavorites,
+      uploadsCount: totalUploads,
+      recentUsers,
+      recentNews,
     })
   })
 

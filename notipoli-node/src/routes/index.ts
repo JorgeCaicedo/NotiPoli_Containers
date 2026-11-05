@@ -8,6 +8,7 @@ import { adminRoutes } from './admin.js'
 import { categoryRoutes } from './categories.js'
 import { tagRoutes } from './tags.js'
 import { settingRoutes } from './settings.js'
+import { favoriteRoutes } from './favorites.js'
 
 export async function registerRoutes(app: FastifyInstance) {
   // Register all route modules
@@ -19,4 +20,5 @@ export async function registerRoutes(app: FastifyInstance) {
   await app.register(categoryRoutes, { prefix: '/api/categories' })
   await app.register(tagRoutes, { prefix: '/api/tags' })
   await app.register(settingRoutes, { prefix: '/api/settings' })
+  await app.register(favoriteRoutes, { prefix: '/api/favorites' })
 }
