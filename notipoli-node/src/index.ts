@@ -5,6 +5,7 @@ import prisma from './config/prisma.js'
 import { registerPlugins } from './plugins/index.js'
 import { registerRoutes } from './routes/index.js'
 import { errorHandler } from './middleware/errorHandler.js'
+import { authenticate } from './middleware/auth.js'
 
 async function bootstrap() {
   const app = Fastify({
@@ -19,6 +20,9 @@ async function bootstrap() {
 
   // Register plugins (cors, helmet, jwt, swagger, multipart, rate-limit)
   await registerPlugins(app)
+
+  // Register authentication middleware
+  await authenticate(app)
 
   // Register routes
   await registerRoutes(app)

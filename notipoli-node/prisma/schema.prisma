@@ -41,6 +41,7 @@ model User {
   // Relations
   news          News[]    @relation("AuthorNews")
   refreshTokens RefreshToken[]
+  favorites     Favorite[]
 
   @@map("users")
   @@index([email])
@@ -79,6 +80,7 @@ model News {
   author      User       @relation("AuthorNews", fields: [authorId], references: [id])
   categories  NewsCategory[]
   tags        NewsTag[]
+  favorites   Favorite[]
 
   @@map("news")
   @@index([status])
@@ -157,4 +159,39 @@ model Setting {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("settings")
+}
+
+// ============================================
+// ROLE PERMISSIONS
+// ============================================
+model RoleMenu {
+  id         Int      @id @default(autoincrement())
+  role       String
+  menuPath   String   @map("menu_path")
+  menuLabel  String   @map("menu_label")
+  menuIcon   String?  @map("menu_icon")
+  menuOrder  Int      @default(0) @map("menu_order")
+
+  @@map("role_menus")
+  @@index([role])
+  @@index([role, menuOrder])
+  @@unique([role, menuPath])
+}
+
+// ============================================
+// USER FAVORITES
+// ============================================
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  newsId    String   @map("news_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@map("favorites")
+  @@unique([userId, newsId])
+  @@index([userId])
+  @@index([newsId])
 }
