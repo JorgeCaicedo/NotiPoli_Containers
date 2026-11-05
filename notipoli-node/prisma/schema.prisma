@@ -78,8 +78,8 @@ model News {
 
   // Relations
   author      User       @relation("AuthorNews", fields: [authorId], references: [id])
-  categories  NewsCategory[]
-  tags        NewsTag[]
+  categories  Category[]
+  tags        Tag[]
   favorites   Favorite[]
 
   @@map("news")
@@ -98,20 +98,9 @@ model Category {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  news NewsCategory[]
+  News News[]
 
   @@map("categories")
-}
-
-model NewsCategory {
-  newsId      String   @map("news_id")
-  categoryId  String   @map("category_id")
-
-  news     News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@id([newsId, categoryId])
-  @@map("news_categories")
 }
 
 model Tag {
@@ -120,20 +109,9 @@ model Tag {
   slug      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
 
-  news NewsTag[]
+  News News[]
 
   @@map("tags")
-}
-
-model NewsTag {
-  newsId String @map("news_id")
-  tagId  String @map("tag_id")
-
-  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([newsId, tagId])
-  @@map("news_tags")
 }
 
 model Upload {
