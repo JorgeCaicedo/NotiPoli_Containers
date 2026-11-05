@@ -8,16 +8,8 @@ export async function getUserFavorites(userId: string) {
       news: {
         include: {
           author: { select: { name: true } },
-          categories: {
-            include: {
-              category: { select: { name: true } },
-            },
-          },
-          tags: {
-            include: {
-              tag: { select: { name: true } },
-            },
-          },
+          categories: true,
+          tags: true,
         },
       },
     },
@@ -43,16 +35,8 @@ export async function addFavorite(userId: string, newsId: string) {
       news: {
         include: {
           author: { select: { name: true } },
-          categories: {
-            include: {
-              category: { select: { name: true } },
-            },
-          },
-          tags: {
-            include: {
-              tag: { select: { name: true } },
-            },
-          },
+          categories: true,
+          tags: true,
         },
       },
     },
