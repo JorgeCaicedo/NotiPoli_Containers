@@ -2,51 +2,92 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { useAuth } from './AuthContext';
 
 const FavoritesContext = createContext();
-const FAVORITOS_KEY_PREFIX = 'notipoli_favoritos_';
 
 export const useFavorites = () => useContext(FavoritesContext);
 
 export function FavoritesProvider({ children }) {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Memoizar el key del usuario para evitar re-ejecuciones del efecto
-  const userId = user?.id;
-
+  // Cargar favoritos desde el backend cuando el usuario cambia
   useEffect(() => {
-    if (userId) {
-      const key = FAVORITOS_KEY_PREFIX + userId;
-      const stored = localStorage.getItem(key);
+    if (!user) {
+      setFavorites([]);
+      return;
+    }
+
+    const loadFavorites = async () => {
+      setLoading(true);
       try {
-        setFavorites(stored ? JSON.parse(stored) : []);
+        const token = localStorage.getItem('notipoli_token');
+        if (!token) {
+          setFavorites([]);
+          return;
+        }
+
+        const resp = await fetch('/api/favorites', {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await resp.json();
+        // Solo devolver IDs para compatibilidad con isFavorito y toggleFavorite
+        setFavorites(data.favorites.map(f => f.newsId));
       } catch (e) {
         setFavorites([]);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setFavorites([]);
+    };
+
+    loadFavorites();
+  }, [user]);
+
+  // Toggle favorito usando la API del backend
+  const toggleFavorite = useCallback(async (id) => {
+    if (!user) return false;
+
+    try {
+      const token = localStorage.getItem('notipoli_token');
+      if (!token) return false;
+
+      const isCurrentlyFavorite = favorites.includes(String(id));
+
+      if (isCurrentlyFavorite) {
+        // Quitar de favoritos
+        await fetch(`/api/favorites/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        setFavorites(prev => prev.filter(f => f !== String(id)));
+      } else {
+        // Agregar a favoritos
+        await fetch('/api/favorites', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newsId: id }),
+        });
+        setFavorites(prev => [...prev, String(id)]);
+      }
+
+      return true;
+    } catch (e) {
+      return false;
     }
-  }, [userId]);
+  }, [user, favorites]);
 
-  // Memoizar toggleFavorite con useCallback
-  const toggleFavorite = useCallback((id) => {
-    if (!userId) return false;
-    const key = FAVORITOS_KEY_PREFIX + userId;
-    const strId = String(id);
-    setFavorites(prev => {
-      const newFavs = prev.includes(strId)
-        ? prev.filter(f => f !== strId)
-        : [...prev, strId];
-      localStorage.setItem(key, JSON.stringify(newFavs));
-      return newFavs;
-    });
-    return true;
-  }, [userId]);
-
-  // Memoizar isFavorito
+  // Verificar si es favorito
   const isFavorito = useCallback((id) => favorites.includes(String(id)), [favorites]);
 
-  // Memoizar el valor del contexto
-  const contextValue = useMemo(() => ({ favorites, toggleFavorite, isFavorito }), [favorites, toggleFavorite, isFavorito]);
+  // Valor del contexto
+  const contextValue = useMemo(() => ({
+    favorites,
+    loading,
+    toggleFavorite,
+    isFavorito,
+  }), [favorites, loading, toggleFavorite, isFavorito]);
 
   return (
     <FavoritesContext.Provider value={contextValue}>
