@@ -82,7 +82,7 @@ export async function newsRoutes(app: FastifyInstance) {
 
     const page = typeof query.page === 'string' ? parseInt(query.page, 10) : 1
     const limit = typeof query.limit === 'string' ? parseInt(query.limit, 10) : 10
-    const status = query.status || 'DRAFT'
+    const status = query.status
     const categoryId = query.categoryId
     const tagId = query.tagId
     const authorId = query.authorId
