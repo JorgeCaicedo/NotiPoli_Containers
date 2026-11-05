@@ -1,21 +1,56 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 
 const HeaderComponent = () => {
-  const { user, logout, isAdmin, isRegistrado } = useAuth();
+  const { user, logout, isAdmin, isEditor, isRegistrado, fetchMenus } = useAuth();
   const { favorites } = useFavorites();
   const navigate = useNavigate();
+  const [menus, setMenus] = useState([]);
+  const [loadingMenus, setLoadingMenus] = useState(false);
 
-  // Derive boolean values during render instead of calling functions
-  const isUserRegistrado = isRegistrado();
-  const isUserAdmin = isAdmin();
+  // Load menus from backend when user changes
+  useEffect(() => {
+    if (user) {
+      setLoadingMenus(true);
+      fetchMenus().then(setMenus).catch(() => setMenus([])).finally(() => setLoadingMenus(false));
+    } else {
+      setMenus([]);
+    }
+  }, [user, fetchMenus]);
 
-  // Memoize logout handler
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  // Render menus from backend
+  const renderMenus = () => {
+    if (loadingMenus || !menus.length) {
+      return (
+        <>
+          <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Inicio</Link>
+          <Link to="/noticias" className="text-gray-700 hover:text-blue-600 font-medium">Noticias</Link>
+          <Link to="/contacto" className="text-gray-700 hover:text-blue-600 font-medium">Contacto</Link>
+        </>
+      );
+    }
+
+    return menus.map((menu, index) => (
+      <React.Fragment key={`${menu.menuPath}-${index}`}>
+        <Link
+          to={menu.menuPath}
+          className="text-gray-700 hover:text-blue-600 font-medium flex items-center gap-1"
+        >
+          {menu.menuIcon && <i className={menu.menuIcon}></i>}
+          {menu.menuLabel}
+          {menu.menuLabel === 'Favoritos' && favorites.length > 0 && (
+            <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{favorites.length}</span>
+          )}
+        </Link>
+      </React.Fragment>
+    ));
   };
 
   return (
@@ -28,24 +63,12 @@ const HeaderComponent = () => {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8 items-center">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Inicio</Link>
-            <Link to="/noticias" className="text-gray-700 hover:text-blue-600 font-medium">Noticias</Link>
-            {isUserRegistrado && (
-              <Link to="/noticias?favoritos=true" className="text-gray-700 hover:text-blue-600 font-medium flex items-center gap-1">
-                Favoritos <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{favorites.length}</span>
-              </Link>
-            )}
-            <Link to="/contacto" className="text-gray-700 hover:text-blue-600 font-medium">Contacto</Link>
-            {isUserAdmin && (
-              <Link to="/admin" className="text-purple-600 hover:text-purple-800 font-medium flex items-center gap-1">
-                <i className="bi bi-shield-lock"></i> Admin
-              </Link>
-            )}
+            {renderMenus()}
           </nav>
           <div className="flex items-center gap-4">
             {user ? (
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-gray-700 hidden sm:inline">Hola, {user.nombre}</span>
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline">Hola, {user.name || user.nombre}</span>
                 <button
                   onClick={handleLogout}
                   className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-md text-sm font-medium transition"

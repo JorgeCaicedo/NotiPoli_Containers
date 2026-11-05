@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useFavorites } from '../context/FavoritesContext';
 
-const NewsCardComponent = ({ noticia }) => {
+const NewsCardComponent = ({ noticia, isFavorite }) => {
   const { toggleFavorite, isFavorito } = useFavorites();
 
-  const isFav = isFavorito(noticia.id);
+  const isFav = isFavorite !== undefined ? isFavorite : isFavorito(noticia.id);
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col transition hover:shadow-lg" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 300px' }}>

@@ -9,11 +9,14 @@ import Footer from './components/Footer';
 
 import HomePage from './pages/HomePage';
 import NewsListPage from './pages/NewsListPage';
+import NewsListFavoritePage from './pages/NewsListFavoritePage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import LoginPage from './pages/LoginPage';
 import ContactPage from './pages/ContactPage';
 
-// Dynamic import for AdminPage - heavy component not needed on initial render
+// Dynamic import for NewsToolsPage - CRUD de noticias
+const NewsToolsPage = lazy(() => import('./pages/NewsToolsPage'));
+// Dynamic import for AdminPage - panel de administración
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 const LoadingFallback = () => (
@@ -35,10 +38,12 @@ export default function App() {
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/noticias" element={<NewsListPage />} />
+                    <Route path="/favoritos" element={<NewsListFavoritePage />} />
                     <Route path="/detalle/:id" element={<NewsDetailPage />} />
+                    <Route path="/herramientas-noticias" element={<NewsToolsPage />} />
+                    <Route path="/administracion" element={<AdminPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/contacto" element={<ContactPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
                   </Routes>
                 </Suspense>
               </main>
