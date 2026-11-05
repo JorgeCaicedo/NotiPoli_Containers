@@ -99,14 +99,20 @@ docker compose exec backend npx prisma db seed
 
 ## Credenciales por Defecto (Seed)
 
-Después de ejecutar `prisma db seed`:
+Después de ejecutar `npx prisma db seed`:
 
-| Rol | Email | Contraseña |
-|-----|-------|------------|
-| **Admin** | `admin@notipoli.com` | `admin123` |
-| **Editor** | `editor@notipoli.com` | `admin123` |
+| Rol | Email | Contraseña | Menús |
+|-----|-------|------------|-------|
+| **Admin** | `admin@notipoli.com` | `admin123` | Panel, Noticias, Categorías, Etiquetas, Usuarios, Configuración, Favoritos |
+| **Editor** | `editor@notipoli.com` | `editor123` | Noticias, Categorías, Etiquetas, Favoritos |
 
 > ⚠️ **Cambia estas contraseñas inmediatamente en producción**
+
+### Usuarios adicionales creados manualmente
+
+| Rol | Email | Contraseña | Menús |
+|-----|-------|------------|-------|
+| **VIEWER** | `registrado@notipoli.com` | `editor123` | Inicio, Noticias, Contacto, Favoritos |
 
 ---
 
@@ -195,13 +201,14 @@ VITE_APP_NAME=NotiPoli
 ## API Endpoints
 
 ### Autenticación
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/auth/login` | Iniciar sesión |
-| POST | `/api/auth/register` | Registro de usuario |
-| POST | `/api/auth/refresh` | Renovar access token |
-| POST | `/api/auth/logout` | Cerrar sesión |
-| GET | `/api/auth/me` | Perfil usuario actual |
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/login` | Iniciar sesión | Público |
+| POST | `/api/auth/register` | Registro de usuario | Público |
+| POST | `/api/auth/refresh` | Renovar access token | Público |
+| POST | `/api/auth/logout` | Cerrar sesión | Usuario |
+| GET | `/api/auth/me` | Perfil usuario actual | Usuario |
+| GET | `/api/auth/menus` | Menús según rol del usuario | Usuario |
 
 ### Noticias
 | Método | Endpoint | Descripción | Auth |
@@ -250,10 +257,18 @@ VITE_APP_NAME=NotiPoli
 | CRUD | `/api/categories`, `/api/tags` | Admin only |
 
 ### Configuración
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/settings` | Listar settings |
-| PUT | `/api/settings/:key` | Actualizar setting (admin) |
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/settings` | Listar settings | Público |
+| PUT | `/api/settings/:key` | Actualizar setting (admin) | Admin |
+
+### Favoritos
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/favorites` | Listar noticias favoritas del usuario | Usuario |
+| POST | `/api/favorites` | Agregar noticia a favoritos | Usuario |
+| DELETE | `/api/favorites/:newsId` | Quitar noticia de favoritos | Usuario |
+| GET | `/api/favorites/:newsId` | Verificar si noticia es favorita | Usuario |
 
 ---
 
@@ -305,7 +320,7 @@ notipoli-node/
 ├── package.json               # Fastify, Prisma, Zod, JWT, Swagger
 ├── tsconfig.json              # Path aliases @/*
 ├── prisma/
-│   ├── schema.prisma          # Modelos: User, News, Category, Tag, Upload, Setting
+│   ├── schema.prisma          # Modelos: User, News, Category, Tag, Upload, Setting, Favorite, RoleMenu
 │   ├── init.sql               # Extensiones PG (uuid, pg_trgm)
 │   └── seed.ts                # Datos iniciales
 └── src/
@@ -313,7 +328,8 @@ notipoli-node/
     ├── config/                # env validation (Zod), Prisma client singleton
     ├── plugins/               # CORS, Helmet, JWT (access+refresh), Swagger, Rate-limit, Multipart
     ├── middleware/            # Error handler, Auth (JWT + roles)
-    └── routes/                # auth, news, users, uploads, admin, categories, tags, settings
+    ├── services/              # roleMenuService, favoriteService
+    └── routes/                # auth, news, users, uploads, admin, categories, tags, settings, favorites
 ```
 
 ### Frontend (`notipoli-react/`)

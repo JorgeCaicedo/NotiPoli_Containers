@@ -16,7 +16,16 @@
       "Bash(curl -s -o /dev/null -w \"Root: %{http_code}\" http://localhost/)",
       "Bash(curl -s -o /dev/null -w \"/health: %{http_code}\" http://localhost/health)",
       "Bash(curl -s -o /dev/null -w \"/docs: %{http_code}\" http://localhost/docs)",
-      "Bash(curl -s -o /dev/null -w \"/api/auth/login: %{http_code}\" http://localhost/api/auth/login)"
+      "Bash(curl -s -o /dev/null -w \"/api/auth/login: %{http_code}\" http://localhost/api/auth/login)",
+      "Bash(curl -s -o /dev/null -w \"Swagger: %{http_code}\" http://localhost/docs)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"const j=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); console.log\\(j.success ? 'LOGIN OK' : 'LOGIN FAILED'\\)\")",
+      "Bash(echo \"   Health:    $\\(curl -s http://localhost/health\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"admin@notipoli.com\",\"password\":\"admin123\"}')",
+      "Bash(echo \"   Login:     $\\(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"admin@notipoli.com\",\"password\":\"admin123\"}'\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost/docs)",
+      "Bash(node -e \"const j=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); console.log\\(j.user.email, 'logged in successfully'\\)\")"
     ]
   }
 }
