@@ -103,16 +103,43 @@ Después de ejecutar `npx prisma db seed`:
 
 | Rol | Email | Contraseña | Menús |
 |-----|-------|------------|-------|
-| **Admin** | `admin@notipoli.com` | `admin123` | Panel, Noticias, Categorías, Etiquetas, Usuarios, Configuración, Favoritos |
-| **Editor** | `editor@notipoli.com` | `editor123` | Noticias, Categorías, Etiquetas, Favoritos |
+| **Admin** | `admin@notipoli.com` | `admin123` | Inicio, Noticias, Favoritos, Contacto, Gestión Noticias, Administración |
+| **Editor** | `editor@notipoli.com` | `editor123` | Inicio, Noticias, Favoritos, Contacto, Gestión Noticias |
 
 > ⚠️ **Cambia estas contraseñas inmediatamente en producción**
 
-### Usuarios adicionales creados manualmente
+### Usuarios creados manualmente
 
 | Rol | Email | Contraseña | Menús |
 |-----|-------|------------|-------|
-| **VIEWER** | `registrado@notipoli.com` | `editor123` | Inicio, Noticias, Contacto, Favoritos |
+| **VIEWER** | `registrado@notipoli.com` | `viewer123` | Inicio, Noticias, Favoritos, Contacto |
+
+---
+
+## Menús del Sistema
+
+Los menús son dinámicos y se cargan desde la base de datos según el rol del usuario:
+
+### Menú de ADMIN
+- **Inicio** (`/`) - Página principal
+- **Noticias** (`/noticias`) - Lista de noticias
+- **Favoritos** (`/favoritos`) - Noticias marcadas como favoritas
+- **Contacto** (`/contacto`) - Página de contacto
+- **Gestión Noticias** (`/herramientas-noticias`) - CRUD de noticias
+- **Administración** (`/administracion`) - Panel de admin con estadísticas y usuarios
+
+### Menú de EDITOR
+- **Inicio** (`/`) - Página principal
+- **Noticias** (`/noticias`) - Lista de noticias
+- **Favoritos** (`/favoritos`) - Noticias marcadas como favoritas
+- **Contacto** (`/contacto`) - Página de contacto
+- **Gestión Noticias** (`/herramientas-noticias`) - CRUD de noticias
+
+### Menú de VIEWER
+- **Inicio** (`/`) - Página principal
+- **Noticias** (`/noticias`) - Lista de noticias
+- **Favoritos** (`/favoritos`) - Noticias marcadas como favoritas
+- **Contacto** (`/contacto`) - Página de contacto
 
 ---
 
@@ -344,8 +371,8 @@ notipoli-react/
 ├── package.json               # React 19, Vite, Tailwind 4, Bootstrap 5, React Router 7
 └── src/
     ├── components/            # Header, Footer, HeroSection, NewsCard
-    ├── pages/                 # Home, NewsList, NewsDetail, Login, Admin, Contact
-    ├── context/               # React Context (auth, theme, etc.)
+    ├── pages/                 # Home, NewsList, NewsDetail, Login, NewsListFavoritePage, AdminPage, ContactPage
+    ├── context/               # React Context (auth, favorites, news)
     ├── App.jsx                # Routing principal
     └── main.jsx               # Entry point
 ```
@@ -363,6 +390,8 @@ notipoli-react/
 - **Upload** - Archivos subidos con metadata
 - **Setting** - Configuración clave-valor del sitio
 - **RefreshToken** - Tokens de renovación JWT (revocables)
+- **Favorite** - Relación usuario-noticia para favoritos
+- **RoleMenu** - Menús dinámicos por rol
 
 ### Relaciones
 
@@ -371,6 +400,8 @@ notipoli-react/
 - News N:M Tag (via NewsTag)
 - User 1:N RefreshToken
 - User 1:N Upload (uploadedBy)
+- User 1:N Favorite
+- News 1:1 Favorite
 
 ---
 
@@ -386,7 +417,7 @@ notipoli-react/
 - [ ] Configurar logging/monitoring (Loki, Prometheus, Grafana)
 - [ ] Configurar health checks en load balancer
 
-### Docker Compose Produccción
+### Docker Compose Producción
 
 ```bash
 # En servidor
