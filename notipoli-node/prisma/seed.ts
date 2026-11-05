@@ -99,13 +99,13 @@ async function main() {
   console.log('✅ Additional categories created:', [seguridad.name, normativa.name])
 
   // Create tags
-  const police = await prisma.tag.upsert({ where: { slug: 'policia' }, update: {}, create: { name: 'Policía', slug: 'policia' } })
-  const prevencion = await prisma.tag.upsert({ where: { slug: 'prevencion' }, update: {}, create: { name: 'Prevención', slug: 'prevencion' } })
-  const operativo = await prisma.tag.upsert({ where: { slug: 'operativo' }, update: {}, create: { name: 'Operativo', slug: 'operativo' } })
-  const comunidad = await prisma.tag.upsert({ where: { slug: 'comunidad' }, update: {}, create: { name: 'Comunidad', slug: 'comunidad' } })
-  const tecnologia = await prisma.tag.upsert({ where: { slug: 'tecnologia' }, update: {}, create: { name: 'Tecnología', slug: 'tecnologia' } })
+  const policeTag = await prisma.tag.upsert({ where: { slug: 'policia' }, update: {}, create: { name: 'Policía', slug: 'policia' } })
+  const prevencionTag = await prisma.tag.upsert({ where: { slug: 'prevencion' }, update: {}, create: { name: 'Prevención', slug: 'prevencion' } })
+  const operativoTag = await prisma.tag.upsert({ where: { slug: 'operativo' }, update: {}, create: { name: 'Operativo', slug: 'operativo' } })
+  const comunidadTag = await prisma.tag.upsert({ where: { slug: 'comunidad' }, update: {}, create: { name: 'Comunidad', slug: 'comunidad' } })
+  const tecnologiaTag = await prisma.tag.upsert({ where: { slug: 'tecnologia' }, update: {}, create: { name: 'Tecnología', slug: 'tecnologia' } })
 
-  const tags = [police, prevencion, operativo, comunidad, tecnologia]
+  const tags = [policeTag, prevencionTag, operativoTag, comunidadTag, tecnologiaTag]
   console.log('✅ Tags created:', tags.length)
 
   // Create sample news with Tecnología and Educación categories
