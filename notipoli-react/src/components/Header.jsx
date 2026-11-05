@@ -14,9 +14,19 @@ const HeaderComponent = () => {
   useEffect(() => {
     if (user) {
       setLoadingMenus(true);
-      fetchMenus().then(setMenus).catch(() => setMenus([])).finally(() => setLoadingMenus(false));
+      fetchMenus()
+        .then(data => {
+          const menusList = data?.menus || [];
+          setMenus(menusList);
+        })
+        .catch((err) => {
+          console.error('Error loading menus:', err);
+          setMenus([]);
+        })
+        .finally(() => setLoadingMenus(false));
     } else {
       setMenus([]);
+      setLoadingMenus(false);
     }
   }, [user, fetchMenus]);
 
@@ -25,46 +35,46 @@ const HeaderComponent = () => {
     navigate('/');
   };
 
-  const handleFavoritosClick = () => {
-    if (!user) {
-      navigate('/login');
-    }
-  };
-
   // Render menus from backend
   const renderMenus = () => {
+    // Always show Favoritos if logged in, even if menus loading or empty
+    const hasFavoritos = menus.some(m => m.menuLabel === 'Favoritos');
+
     if (loadingMenus || !menus.length) {
-      return (
-        <>
-          <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Inicio</Link>
-          <Link to="/noticias" className="text-gray-700 hover:text-blue-600 font-medium">Noticias</Link>
-          <Link to="/favoritos" className="text-gray-700 hover:text-blue-600 font-medium">Favoritos</Link>
-          <Link to="/contacto" className="text-gray-700 hover:text-blue-600 font-medium">Contacto</Link>
-        </>
-      );
+      const fallbackMenus = [
+        { menuPath: '/', menuLabel: 'Inicio', menuIcon: 'bi bi-house' },
+        { menuPath: '/noticias', menuLabel: 'Noticias', menuIcon: 'bi bi-newspaper' },
+        { menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star' },
+        { menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope' },
+        ...(user && !hasFavoritos
+          ? [{ menuPath: '/herramientas-noticias', menuLabel: 'Gestión Noticias', menuIcon: 'bi bi-gear' },
+             { menuPath: '/administracion', menuLabel: 'Administración', menuIcon: 'bi bi-shield-lock' }]
+          : []),
+      ];
+
+      return fallbackMenus.map((menu, index) => (
+        <Link key={`${menu.menuPath}-${index}`} to={menu.menuPath} className="text-gray-700 hover:text-blue-600 font-medium flex items-center gap-1">
+          {menu.menuIcon && <i className={menu.menuIcon}></i>}
+          {menu.menuLabel}
+          {menu.menuLabel === 'Favoritos' && favorites.length > 0 && (
+            <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{favorites.length}</span>
+          )}
+        </Link>
+      ));
     }
 
     return menus.map((menu, index) => (
       <React.Fragment key={`${menu.menuPath}-${index}`}>
-        {menu.menuLabel === 'Favoritos' && !user ? (
-          <span
-            onClick={handleFavoritosClick}
-            className="text-gray-700 hover:text-blue-600 font-medium cursor-pointer px-2 py-1 rounded hover:bg-gray-100"
-          >
-            Favoritos
-          </span>
-        ) : (
-          <Link
-            to={menu.menuPath}
-            className="text-gray-700 hover:text-blue-600 font-medium flex items-center gap-1"
-          >
-            {menu.menuIcon && <i className={menu.menuIcon}></i>}
-            {menu.menuLabel}
-            {menu.menuLabel === 'Favoritos' && favorites.length > 0 && (
-              <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{favorites.length}</span>
-            )}
-          </Link>
-        )}
+        <Link
+          to={menu.menuPath}
+          className="text-gray-700 hover:text-blue-600 font-medium flex items-center gap-1"
+        >
+          {menu.menuIcon && <i className={menu.menuIcon}></i>}
+          {menu.menuLabel}
+          {menu.menuLabel === 'Favoritos' && favorites.length > 0 && (
+            <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{favorites.length}</span>
+          )}
+        </Link>
       </React.Fragment>
     ));
   };
