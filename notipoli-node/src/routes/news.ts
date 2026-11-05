@@ -63,8 +63,19 @@ function generateSlug(title: string): string {
 
 export async function newsRoutes(app: FastifyInstance) {
   // GET /api/news - List news (public: only published)
-  app.get('/', { schema: newsQuerySchema }, async (request, reply) => {
-    const { page, limit, status, categoryId, tagId, authorId, search, sort, order } = request.query as any
+  app.get('/', async (request, reply) => {
+    // Parse and validate query params with defaults
+    const query = request.query as any
+
+    const page = typeof query.page === 'string' ? parseInt(query.page, 10) : 1
+    const limit = typeof query.limit === 'string' ? parseInt(query.limit, 10) : 10
+    const status = query.status || 'DRAFT'
+    const categoryId = query.categoryId
+    const tagId = query.tagId
+    const authorId = query.authorId
+    const search = query.search
+    const sort = query.sort || 'publishedAt'
+    const order = query.order || 'desc'
 
     const where: any = {}
 
@@ -73,8 +84,8 @@ export async function newsRoutes(app: FastifyInstance) {
     if (!isAdminOrEditor) {
       where.status = 'PUBLISHED'
       where.publishedAt = { lte: new Date() }
-    } else if (status) {
-      where.status = status
+    } else if (query.status) {
+      where.status = query.status
     }
 
     if (categoryId) where.categories = { some: { categoryId } }
@@ -136,9 +147,12 @@ export async function newsRoutes(app: FastifyInstance) {
     return reply.send({ data: news })
   })
 
-  // GET /api/news/:id - Get by ID (admin/editor)
-  app.get('/:id', { schema: idParamSchema, preHandler: [requireRole('ADMIN', 'EDITOR')] }, async (request, reply) => {
+  // GET /api/news/:id - Get by ID (admin/editor can see all, viewer/editor see published only)
+  app.get('/:id', { schema: idParamSchema }, async (request, reply) => {
     const { id } = request.params as any
+
+    const user = request.authUser as AuthUser | undefined
+    const isAdminOrEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR'
 
     const news = await prisma.news.findUnique({
       where: { id },
@@ -151,6 +165,13 @@ export async function newsRoutes(app: FastifyInstance) {
 
     if (!news) {
       return reply.status(404).send({ message: 'News not found' })
+    }
+
+    // Check if news is accessible for non-admin/editor users
+    if (!isAdminOrEditor) {
+      if (news.status !== 'PUBLISHED' || (news.publishedAt && news.publishedAt > new Date())) {
+        return reply.status(404).send({ message: 'News not found' })
+      }
     }
 
     return reply.send({ data: news })
