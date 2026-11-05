@@ -2,19 +2,26 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useFavorites } from '../context/FavoritesContext';
 
-// Placeholder image for news cards - a generic news/police related image
-const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1551640323-cba7b96b7c5a?w=400&h=300&fit=crop&crop=faces';
+// Generate unique placeholder image URL based on slug
+// picsum.photos/seed/{slug} always returns the same image for the same slug
+const getPlaceholderImage = (slug) => {
+  const seed = encodeURIComponent(slug || 'default');
+  return `https://picsum.photos/seed/${seed}/400/300`;
+};
 
 const NewsCardComponent = ({ noticia, isFavorite }) => {
   const { toggleFavorite, isFavorito } = useFavorites();
 
   const isFav = isFavorite !== undefined ? isFavorite : isFavorito(noticia.id);
 
+  // Use existing image or generate unique placeholder based on slug
+  const imageUrl = noticia.imagen || getPlaceholderImage(noticia.slug);
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col transition hover:shadow-lg" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 300px' }}>
       <div className="relative h-48 overflow-hidden bg-gray-200">
         <img
-          src={noticia.imagen || PLACEHOLDER_IMAGE}
+          src={imageUrl}
           alt={noticia.titulo}
           className="w-full h-full object-cover transition hover:scale-105 duration-300"
           loading="lazy"
