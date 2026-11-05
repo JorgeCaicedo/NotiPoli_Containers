@@ -55,9 +55,13 @@ export default function NewsDetailPage() {
         </button>
       </div>
 
-      {noticia.imagen && (
+      {(noticia.imagen || noticia.coverImage) ? (
         <div className="mb-8 rounded-xl overflow-hidden shadow-lg h-[400px]">
-          <img src={noticia.imagen} alt={noticia.titulo} className="w-full h-full object-cover" />
+          <img src={noticia.imagen || noticia.coverImage} alt={noticia.titulo} className="w-full h-full object-cover" />
+        </div>
+      ) : (
+        <div className="mb-8 rounded-xl overflow-hidden shadow-lg h-[400px] bg-gray-200 flex items-center justify-center">
+          <i className="bi bi-image text-6xl text-gray-400"></i>
         </div>
       )}
 

@@ -2,6 +2,9 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useFavorites } from '../context/FavoritesContext';
 
+// Placeholder image for news cards - a generic news/police related image
+const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1551640323-cba7b96b7c5a?w=400&h=300&fit=crop&crop=faces';
+
 const NewsCardComponent = ({ noticia, isFavorite }) => {
   const { toggleFavorite, isFavorito } = useFavorites();
 
@@ -11,7 +14,7 @@ const NewsCardComponent = ({ noticia, isFavorite }) => {
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col transition hover:shadow-lg" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 300px' }}>
       <div className="relative h-48 overflow-hidden bg-gray-200">
         <img
-          src={noticia.imagen || 'https://picsum.photos/400/300'}
+          src={noticia.imagen || PLACEHOLDER_IMAGE}
           alt={noticia.titulo}
           className="w-full h-full object-cover transition hover:scale-105 duration-300"
           loading="lazy"
