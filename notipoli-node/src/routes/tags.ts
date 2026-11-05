@@ -27,7 +27,7 @@ export async function tagRoutes(app: FastifyInstance) {
   // GET /api/tags - List all (public)
   app.get('/', async (request, reply) => {
     const tags = await prisma.tag.findMany({
-      include: { _count: { select: { news: true } } },
+      include: { _count: { select: { News: true } } },
       orderBy: { name: 'asc' },
     })
     return reply.send({ data: tags })
@@ -38,7 +38,7 @@ export async function tagRoutes(app: FastifyInstance) {
     const { id } = request.params as any
     const tag = await prisma.tag.findUnique({
       where: { id },
-      include: { _count: { select: { news: true } } },
+      include: { _count: { select: { News: true } } },
     })
     if (!tag) return reply.status(404).send({ message: 'Tag not found' })
     return reply.send({ data: tag })

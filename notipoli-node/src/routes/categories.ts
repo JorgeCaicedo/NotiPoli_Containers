@@ -31,7 +31,7 @@ export async function categoryRoutes(app: FastifyInstance) {
   // GET /api/categories - List all (public)
   app.get('/', async (request, reply) => {
     const categories = await prisma.category.findMany({
-      include: { _count: { select: { news: true } } },
+      include: { _count: { select: { News: true } } },
       orderBy: { name: 'asc' },
     })
     return reply.send({ data: categories })
@@ -42,7 +42,7 @@ export async function categoryRoutes(app: FastifyInstance) {
     const { id } = request.params as any
     const category = await prisma.category.findUnique({
       where: { id },
-      include: { _count: { select: { news: true } } },
+      include: { _count: { select: { News: true } } },
     })
     if (!category) return reply.status(404).send({ message: 'Category not found' })
     return reply.send({ data: category })
