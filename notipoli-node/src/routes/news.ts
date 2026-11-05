@@ -117,8 +117,8 @@ export async function newsRoutes(app: FastifyInstance) {
         where,
         include: {
           author: { select: { id: true, name: true, avatarUrl: true } },
-          categories: { include: { category: true } },
-          tags: { include: { tag: true } },
+          categories: true,
+          tags: true,
         },
         orderBy: { [sort]: order },
         skip: (page - 1) * limit,
@@ -144,8 +144,8 @@ export async function newsRoutes(app: FastifyInstance) {
       where: { slug },
       include: {
         author: { select: { id: true, name: true, avatarUrl: true } },
-        categories: { include: { category: true } },
-        tags: { include: { tag: true } },
+        categories: true,
+        tags: true,
       },
     })
 
@@ -171,8 +171,8 @@ export async function newsRoutes(app: FastifyInstance) {
       where: { id },
       include: {
         author: { select: { id: true, name: true, avatarUrl: true } },
-        categories: { include: { category: true } },
-        tags: { include: { tag: true } },
+        categories: true,
+        tags: true,
       },
     })
 
@@ -191,29 +191,55 @@ export async function newsRoutes(app: FastifyInstance) {
   })
 
   // POST /api/news - Create news (admin/editor)
-  app.post('/', { schema: createNewsSchema, preHandler: [requireRole('ADMIN', 'EDITOR')] }, async (request, reply) => {
+  app.post('/', {
+    schema: createNewsSchema,
+    preHandler: [
+      async (request, reply) => {
+        const token = request.headers.authorization?.replace('Bearer ', '')
+        if (!token) return reply.status(401).send({ message: 'Unauthorized' })
+        try {
+          const decoded = await request.jwtVerify<AuthUser>()
+          request.authUser = decoded
+        } catch {
+          return reply.status(401).send({ message: 'Invalid token' })
+        }
+      },
+      requireRole('ADMIN', 'EDITOR'),
+    ],
+  }, async (request, reply) => {
     const { title, excerpt, content, coverImage, status, categoryIds, tagIds } = request.body as any
     const user = request.authUser as AuthUser
 
     const slug = generateSlug(title)
 
+    const newsData: any = {
+      title,
+      slug,
+      excerpt,
+      content,
+      coverImage,
+      status,
+      publishedAt: status === 'PUBLISHED' ? new Date() : null,
+      authorId: user.id,
+    }
+
+    if (categoryIds && categoryIds.length > 0) {
+      newsData.categories = {
+        connect: categoryIds.map((id: string) => ({ id })),
+      }
+    }
+    if (tagIds && tagIds.length > 0) {
+      newsData.tags = {
+        connect: tagIds.map((id: string) => ({ id })),
+      }
+    }
+
     const news = await prisma.news.create({
-      data: {
-        title,
-        slug,
-        excerpt,
-        content,
-        coverImage,
-        status,
-        publishedAt: status === 'PUBLISHED' ? new Date() : null,
-        authorId: user.id,
-        categories: categoryIds?.map((id: string) => ({ categoryId: id })),
-        tags: tagIds?.map((id: string) => ({ tagId: id })),
-      },
+      data: newsData,
       include: {
         author: { select: { id: true, name: true } },
-        categories: { include: { category: true } },
-        tags: { include: { tag: true } },
+        categories: true,
+        tags: true,
       },
     })
 
@@ -221,7 +247,22 @@ export async function newsRoutes(app: FastifyInstance) {
   })
 
   // PUT /api/news/:id - Update news (admin/editor)
-  app.put('/:id', { schema: updateNewsSchema, preHandler: [requireRole('ADMIN', 'EDITOR')] }, async (request, reply) => {
+  app.put('/:id', {
+    schema: updateNewsSchema,
+    preHandler: [
+      async (request, reply) => {
+        const token = request.headers.authorization?.replace('Bearer ', '')
+        if (!token) return reply.status(401).send({ message: 'Unauthorized' })
+        try {
+          const decoded = await request.jwtVerify<AuthUser>()
+          request.authUser = decoded
+        } catch {
+          return reply.status(401).send({ message: 'Invalid token' })
+        }
+      },
+      requireRole('ADMIN', 'EDITOR'),
+    ],
+  }, async (request, reply) => {
     const { id } = request.params as any
     const { title, excerpt, content, coverImage, status, categoryIds, tagIds } = request.body as any
 
@@ -242,17 +283,25 @@ export async function newsRoutes(app: FastifyInstance) {
       }
     }
 
+    const updateData: any = { ...data }
+    if (categoryIds) {
+      updateData.categories = {
+        set: categoryIds.map((id: string) => ({ id })),
+      }
+    }
+    if (tagIds) {
+      updateData.tags = {
+        set: tagIds.map((id: string) => ({ id })),
+      }
+    }
+
     const news = await prisma.news.update({
       where: { id },
-      data: {
-        ...data,
-        categories: categoryIds ? { set: categoryIds.map((cid: string) => ({ categoryId: cid })) } : undefined,
-        tags: tagIds ? { set: tagIds.map((tid: string) => ({ tagId: tid })) } : undefined,
-      },
+      data: updateData,
       include: {
         author: { select: { id: true, name: true } },
-        categories: { include: { category: true } },
-        tags: { include: { tag: true } },
+        categories: true,
+        tags: true,
       },
     })
 
@@ -260,7 +309,22 @@ export async function newsRoutes(app: FastifyInstance) {
   })
 
   // DELETE /api/news/:id - Delete news (admin only)
-  app.delete('/:id', { schema: idParamSchema, preHandler: [requireRole('ADMIN')] }, async (request, reply) => {
+  app.delete('/:id', {
+    schema: idParamSchema,
+    preHandler: [
+      async (request, reply) => {
+        const token = request.headers.authorization?.replace('Bearer ', '')
+        if (!token) return reply.status(401).send({ message: 'Unauthorized' })
+        try {
+          const decoded = await request.jwtVerify<AuthUser>()
+          request.authUser = decoded
+        } catch {
+          return reply.status(401).send({ message: 'Invalid token' })
+        }
+      },
+      requireRole('ADMIN'),
+    ],
+  }, async (request, reply) => {
     const { id } = request.params as any
 
     const existing = await prisma.news.findUnique({ where: { id } })
