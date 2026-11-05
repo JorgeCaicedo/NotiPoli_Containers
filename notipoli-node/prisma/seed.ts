@@ -201,30 +201,26 @@ async function main() {
 
   // Create role menus for all roles
   const menus = [
-    // ADMIN menus
+    // ADMIN menus: Inicio, Noticias, Favoritos, Contacto, Gestión Noticias, Administración
     { role: 'ADMIN', menuPath: '/', menuLabel: 'Inicio', menuIcon: 'bi bi-house', menuOrder: 1 },
     { role: 'ADMIN', menuPath: '/noticias', menuLabel: 'Noticias', menuIcon: 'bi bi-newspaper', menuOrder: 2 },
-    { role: 'ADMIN', menuPath: '/herramientas-noticias', menuLabel: 'Crear Noticia', menuIcon: 'bi bi-file-earmark-plus', menuOrder: 3 },
-    { role: 'ADMIN', menuPath: '/categorias', menuLabel: 'Categorías', menuIcon: 'bi bi-folder', menuOrder: 4 },
-    { role: 'ADMIN', menuPath: '/tags', menuLabel: 'Etiquetas', menuIcon: 'bi bi-tags', menuOrder: 5 },
+    { role: 'ADMIN', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 3 },
+    { role: 'ADMIN', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 4 },
+    { role: 'ADMIN', menuPath: '/herramientas-noticias', menuLabel: 'Gestión Noticias', menuIcon: 'bi bi-file-earmark-text', menuOrder: 5 },
     { role: 'ADMIN', menuPath: '/administracion', menuLabel: 'Administración', menuIcon: 'bi bi-shield-lock', menuOrder: 6 },
-    { role: 'ADMIN', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 7 },
-    { role: 'ADMIN', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 98 },
 
     // EDITOR menus
     { role: 'EDITOR', menuPath: '/', menuLabel: 'Inicio', menuIcon: 'bi bi-house', menuOrder: 1 },
     { role: 'EDITOR', menuPath: '/noticias', menuLabel: 'Noticias', menuIcon: 'bi bi-newspaper', menuOrder: 2 },
-    { role: 'EDITOR', menuPath: '/herramientas-noticias', menuLabel: 'Crear Noticia', menuIcon: 'bi bi-file-earmark-plus', menuOrder: 3 },
-    { role: 'EDITOR', menuPath: '/categorias', menuLabel: 'Categorías', menuIcon: 'bi bi-folder', menuOrder: 4 },
-    { role: 'EDITOR', menuPath: '/tags', menuLabel: 'Etiquetas', menuIcon: 'bi bi-tags', menuOrder: 5 },
-    { role: 'EDITOR', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 6 },
-    { role: 'EDITOR', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 98 },
+    { role: 'EDITOR', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 3 },
+    { role: 'EDITOR', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 4 },
+    { role: 'EDITOR', menuPath: '/herramientas-noticias', menuLabel: 'Gestión Noticias', menuIcon: 'bi bi-file-earmark-text', menuOrder: 5 },
 
     // VIEWER menus
     { role: 'VIEWER', menuPath: '/', menuLabel: 'Inicio', menuIcon: 'bi bi-house', menuOrder: 1 },
     { role: 'VIEWER', menuPath: '/noticias', menuLabel: 'Noticias', menuIcon: 'bi bi-newspaper', menuOrder: 2 },
-    { role: 'VIEWER', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 3 },
-    { role: 'VIEWER', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 99 },
+    { role: 'VIEWER', menuPath: '/favoritos', menuLabel: 'Favoritos', menuIcon: 'bi bi-star', menuOrder: 3 },
+    { role: 'VIEWER', menuPath: '/contacto', menuLabel: 'Contacto', menuIcon: 'bi bi-envelope', menuOrder: 4 },
   ]
 
   for (const menu of menus) {

@@ -7,6 +7,7 @@ export default function NewsListFavoritePage() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [allCategorias, setAllCategorias] = useState(['Todas']);
+  const [error, setError] = useState(null);
 
   // Cargar categorías desde la API
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function NewsListFavoritePage() {
   useEffect(() => {
     const loadFavorites = async () => {
       setLoading(true);
+      setError(null);
       try {
         const token = localStorage.getItem('notipoli_token');
         if (!token) {
@@ -40,9 +42,25 @@ export default function NewsListFavoritePage() {
         const resp = await fetch('/api/favorites', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
+        if (!resp.ok) {
+          if (resp.status === 401) {
+            localStorage.removeItem('notipoli_token');
+            localStorage.removeItem('notipoli_sesion');
+            window.location.href = '/login';
+            return;
+          }
+          console.error('Failed to fetch favorites:', resp.status);
+          setFavorites([]);
+          setLoading(false);
+          return;
+        }
         const data = await resp.json();
-        setFavorites(data.favorites || []);
+        const favs = data.favorites || [];
+        console.log('Favorites data:', favs);
+        setFavorites(favs);
       } catch (e) {
+        console.error('Error loading favorites:', e);
+        setError(e.message);
         setFavorites([]);
       } finally {
         setLoading(false);
@@ -60,12 +78,49 @@ export default function NewsListFavoritePage() {
     );
   }
 
+  const token = localStorage.getItem('notipoli_token');
+  const hasSession = !!token;
+
+  if (!hasSession) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+          <i className="bi bi-star text-4xl text-gray-400 mb-3 block"></i>
+          <p className="text-gray-500 text-lg">Mis Noticias Favoritas</p>
+          <p className="text-gray-400 text-sm mt-2">Debes iniciar sesión para ver tus favoritos.</p>
+          <button
+            onClick={() => window.location.href = '/login'}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Iniciar sesión
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+          <i className="bi bi-exclamation-triangle text-4xl text-yellow-500 mb-3 block"></i>
+          <p className="text-gray-500 text-lg">Error al cargar favoritos</p>
+          <p className="text-gray-400 text-sm mt-2">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   // Memoizar noticias de favoritos con datos completos
   const newsWithDetails = useMemo(() => {
+    if (!favorites || !Array.isArray(favorites)) return [];
+
     return favorites
-      .filter(f => f.news)
+      .filter(f => f && f.news)
       .map(f => {
         const n = f.news;
+        if (!n) return null;
+
         return {
           id: n.id,
           titulo: n.title,
@@ -73,22 +128,22 @@ export default function NewsListFavoritePage() {
           extracto: n.excerpt,
           contenido: n.content,
           imagen: n.coverImage,
-          categoria: n.categories?.[0]?.category?.name || 'Sin categoría',
-          categorias: n.categories?.map((c) => c.category?.name) || [],
+          categoria: n.categories?.[0]?.category?.name || n.category || 'Sin categoría',
+          categorias: n.categories?.map((c) => c?.category?.name || c) || [],
           autor: n.author?.name || 'Redacción',
           fecha: n.publishedAt ? new Date(n.publishedAt).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
-          }) : new Date(n.createdAt).toLocaleDateString('es-ES', {
+          }) : n.createdAt ? new Date(n.createdAt).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
-          }),
+          }) : '',
           status: n.status,
-          tags: n.tags?.map((t) => t.tag?.name) || [],
+          tags: n.tags?.map((t) => t?.tag?.name) || [],
         };
-      });
+      }).filter(Boolean);
   }, [favorites]);
 
   const filtered = useMemo(() => {

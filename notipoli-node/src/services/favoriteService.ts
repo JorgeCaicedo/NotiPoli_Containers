@@ -5,7 +5,21 @@ export async function getUserFavorites(userId: string) {
   return prisma.favorite.findMany({
     where: { userId },
     include: {
-      news: true,
+      news: {
+        include: {
+          author: { select: { name: true } },
+          categories: {
+            include: {
+              category: { select: { name: true } },
+            },
+          },
+          tags: {
+            include: {
+              tag: { select: { name: true } },
+            },
+          },
+        },
+      },
     },
     orderBy: { createdAt: 'desc' },
   })
@@ -25,7 +39,23 @@ export async function isFavorite(userId: string, newsId: string) {
 export async function addFavorite(userId: string, newsId: string) {
   return prisma.favorite.create({
     data: { userId, newsId },
-    include: { news: true },
+    include: {
+      news: {
+        include: {
+          author: { select: { name: true } },
+          categories: {
+            include: {
+              category: { select: { name: true } },
+            },
+          },
+          tags: {
+            include: {
+              tag: { select: { name: true } },
+            },
+          },
+        },
+      },
+    },
   })
 }
 
