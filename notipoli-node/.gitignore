@@ -32,8 +32,3 @@ npm-debug.log*
 
 # Test
 coverage
-
-# Docker
-Dockerfile
-docker-compose.yml
-.dockerignore

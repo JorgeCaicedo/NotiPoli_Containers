@@ -33,10 +33,5 @@ Thumbs.db
 *.sln
 *.sw?
 
-# Docker
-Dockerfile
-nginx.conf
-.dockerignore
-
 # Test
 coverage
