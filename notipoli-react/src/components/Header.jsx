@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 
 const HeaderComponent = () => {
-  const { user, logout, isAdmin, isEditor, isRegistrado, fetchMenus } = useAuth();
+  const { user, loading, logout, isAdmin, isEditor, isRegistrado, fetchMenus } = useAuth();
   const { favorites } = useFavorites();
   const navigate = useNavigate();
   const [menus, setMenus] = useState([]);

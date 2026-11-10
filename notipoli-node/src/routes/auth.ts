@@ -190,13 +190,26 @@ export async function authRoutes(app: FastifyInstance) {
     return reply.send({ user })
   })
 
-  // GET /api/auth/menus - Get menus based on user role (public, requires role param)
-  app.get('/menus', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const role = (request.query as any).role
-      if (!role) {
-        return reply.status(400).send({ message: 'Role parameter required' })
+  // GET /api/auth/menus - Get menus based on user role
+  // Security: query param role rejected - must use JWT authentication
+  app.get('/menus', {
+    preHandler: async (request, reply) => {
+      const token = request.headers.authorization?.replace('Bearer ', '')
+      if (!token) {
+        return reply.status(401).send({ message: 'Authentication required' })
       }
+
+      try {
+        const decoded = await request.jwtVerify<AuthUser>()
+        request.authUser = decoded
+      } catch {
+        return reply.status(401).send({ message: 'Invalid or expired token' })
+      }
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      // Role comes from verified JWT only - query param is ignored for security
+      const role = request.authUser!.role
 
       const menus = await getRoleMenus(role)
 
