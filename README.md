@@ -39,11 +39,13 @@ NotiPoli/
 
 ### Servicios
 
-| Servicio | Puerto | Descripción |
-|----------|--------|-------------|
-| **frontend** | 80, 443 | Nginx sirviendo React build + proxy `/api/*` → backend |
-| **backend** | 3000 (interno) | API REST Fastify + Prisma ORM |
-| **postgres** | 5432 (interno) | Base de datos PostgreSQL 16 |
+| Servicio | Puerto | Imagen / Build | Descripción |
+|----------|--------|----------------|-------------|
+| **frontend** | 80, 443 | Dockerfile (Nginx + React 19) | Nginx sirviendo React build + proxy `/api/*` → backend |
+| **backend** | 3000 (interno) | Dockerfile (Node.js / Fastify) | API REST Fastify + Prisma ORM |
+| **postgres** | 5432 (interno) | `postgres:16.9-alpine` (Oficial fijada) | Base de datos PostgreSQL 16 |
+
+> 🐳 **Nota sobre Docker:** Todas las imágenes y dependencias están versionadas de forma fija (como `postgres:16.9-alpine`) para garantizar entornos estables y reproducibles en desarrollo y producción.
 
 ### Volúmenes Persistentes
 
@@ -459,8 +461,9 @@ LOG_LEVEL=warn
 ### DevOps
 - **Docker** - Contenedores
 - **Docker Compose** - Orquestación local
+- **GitHub Actions** - CI automatizado para compilación y validación de contenedores en cada `push` o `pull_request` a `main`
 - **Nginx** - Reverse proxy + static serving
-- **Multi-stage builds** - Imágenes optimizadas
+- **Multi-stage builds** - Imágenes optimizadas y oficiales con versiones fijas (ej. Alpine)
 
 ---
 
