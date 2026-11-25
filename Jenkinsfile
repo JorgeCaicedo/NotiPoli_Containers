@@ -30,44 +30,22 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('SmokeTest') {
             steps {
-                echo 'Running backend tests...'
-                // We run npm install locally on the agent if node is available,
-                // or we could run it inside a temporary container.
-                // Assuming the agent has Node.js installed for simple unit testing.
-                bat "cd notipoli-node && npm install && npm test || echo Tests failed or no tests found, continuing"
+                echo 'Running connectivity smoke test...'
+                bat "${DOCKER_PATH} compose up -d"
+                echo 'Waiting for services to be healthy...'
+                bat "timeout /t 20 /nobreak"
+                echo 'Testing connectivity: frontend -> backend -> /api/news'
+                bat "${DOCKER_PATH} exec notipoli-web wget --no-verbose --tries=1 --spider http://backend:3000/api/news"
+                echo '✅ Connectivity test PASSED'
             }
         }
     }
 
     post {
-        success {
-            script {
-                echo 'Pipeline success! Running connectivity smoke test...'
-                try {
-                    // Start the containers. docker compose automatically picks up
-                    // the environment variables defined in the environment {} block.
-                    bat "${DOCKER_PATH} compose up -d"
-
-                    echo 'Waiting for services to be healthy...'
-                    bat "timeout /t 20 /nobreak"
-
-                    echo 'Testing connectivity: frontend -> backend -> /api/news'
-                    bat "${DOCKER_PATH} exec notipoli-web wget --no-verbose --tries=1 --spider http://backend:3000/api/news"
-
-                    echo '✅ Connectivity test PASSED'
-                } catch (Exception e) {
-                    echo "❌ Connectivity test FAILED: ${e.message}"
-                    error("Smoke test failed")
-                } finally {
-                    echo 'Cleaning up containers...'
-                    bat "${DOCKER_PATH} compose down"
-                }
-            }
-        }
-        failure {
-            echo 'Pipeline failed. Ensuring environment is clean...'
+        always {
+            echo 'Cleaning up containers...'
             bat "${DOCKER_PATH} compose down"
         }
     }
