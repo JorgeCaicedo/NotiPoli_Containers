@@ -16,8 +16,8 @@ RUN npm run build
 # --- Runtime stage (nginx) ---
 FROM nginx:1.25-alpine AS runner
 
-# Install wget for health check
-RUN apk add --no-cache wget
+# Install wget and curl for health check and tests
+RUN apk add --no-cache wget curl
 
 # Copy built assets
 COPY --from=builder /app/dist /usr/share/nginx/html

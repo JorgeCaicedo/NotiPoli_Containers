@@ -37,7 +37,7 @@ pipeline {
                 echo 'Waiting for services to be healthy...'
                 bat "timeout /t 20 /nobreak >nul 2>&1"
                 echo 'Testing connectivity: frontend -> backend -> /api/news'
-                bat "${DOCKER_PATH} exec notipoli-web wget --no-verbose --tries=1 --spider http://backend:3000/api/news"
+                bat "${DOCKER_PATH} exec notipoli-web curl -sSf http://backend:3000/api/news"
                 echo '✅ Connectivity test PASSED'
             }
         }
