@@ -35,7 +35,7 @@ pipeline {
                 echo 'Running connectivity smoke test...'
                 bat "${DOCKER_PATH} compose up -d"
                 echo 'Waiting for services to be healthy...'
-                bat "timeout /t 20 /nobreak >nul 2>&1"
+                bat "ping 127.0.0.1 -n 15 >nul"
                 echo 'Testing connectivity: frontend -> backend -> /api/news'
                 bat "${DOCKER_PATH} exec notipoli-web curl -sSf http://backend:3000/api/news"
                 echo '✅ Connectivity test PASSED'
