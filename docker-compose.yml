@@ -3,14 +3,14 @@ services:
     image: postgres:16.9-alpine
     container_name: notipoli-db
     environment:
-      POSTGRES_DB: notipoli
-      POSTGRES_USER: notipoli
+      POSTGRES_DB: ${DB_NAME:-notipoli}
+      POSTGRES_USER: ${DB_USER:-notipoli}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./notipoli-node/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U notipoli -d notipoli"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-notipoli} -d ${DB_NAME:-notipoli}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
     container_name: notipoli-api
     environment:
       NODE_ENV: ${NODE_ENV:-production}
-      DATABASE_URL: postgresql://notipoli:${DB_PASSWORD}@postgres:5432/notipoli?schema=public
+      DATABASE_URL: postgresql://${DB_USER:-notipoli}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-notipoli}?schema=public
       JWT_SECRET: ${JWT_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
