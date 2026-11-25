@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Docker executable path for Windows agents
-        DOCKER_PATH        = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
+        DOCKER_PATH        = '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe"'
         NODE_ENV           = 'production'
 
         // Credentials defined in Jenkins (Manage Jenkins -> Credentials)
