@@ -8,11 +8,11 @@ pipeline {
 
         // Credentials defined in Jenkins (Manage Jenkins -> Credentials)
         // Using credentials() function call fixes the Groovy compilation error
-        DB_PASSWORD        = credentials('db-pass')
-        DB_USER            = credentials('db-user')
-        DB_NAME            = credentials('db-name')
-        JWT_SECRET         = credentials('jwt-secret')
-        JWT_REFRESH_SECRET = credentials('jwt-refresh-secret')
+        DB_PASSWORD        = credentials('DB_PASSWORD')
+        DB_USER            = credentials('DB_USER')
+        DB_NAME            = credentials('DB_NAME')
+        JWT_SECRET         = credentials('JWT_SECRET')
+        JWT_REFRESH_SECRET = credentials('JWT_REFRESH_SECRET')
     }
 
     stages {
