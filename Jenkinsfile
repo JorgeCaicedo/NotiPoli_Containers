@@ -37,7 +37,7 @@ pipeline {
                 echo 'Waiting for services to be healthy...'
                 bat "ping 127.0.0.1 -n 15 >nul"
                 echo 'Testing connectivity: frontend -> backend -> /api/news'
-                bat "${DOCKER_PATH} exec notipoli-web curl -sSf http://notipoli-api:3000/api/news"
+                bat "${DOCKER_PATH} exec notipoli-web curl -sSf http://localhost:3000/api/news"
                 echo '✅ Connectivity test PASSED'
             }
         }
