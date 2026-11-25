@@ -36,6 +36,8 @@ pipeline {
                 bat "${DOCKER_PATH} compose up -d"
                 echo 'Waiting for services to be healthy...'
                 bat "ping 127.0.0.1 -n 15 >nul"
+                echo 'Pushing schema to database...'
+                bat "${DOCKER_PATH} exec notipoli-api npx prisma db push"
                 echo 'Testing connectivity: frontend -> backend -> /api/news'
                 bat 'curl -sSf http://localhost/api/news || exit /b 1'
                 echo '✅ Connectivity test PASSED'
